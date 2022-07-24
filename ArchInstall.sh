@@ -8,7 +8,7 @@ user_name="user"
 user_pswd="1111"
 
 wipefs -a $disk
-parted $disk mklabel gpt mkpart EFI 1049kB 525MB set 1 boot on mkpart ArchLinux 525MB 100%
+parted $disk mklabel gpt mkpart EFI 1049kB 106MB set 1 boot on mkpart ArchLinux 106MB 100%
 mkfs.vfat -n EFI $disk"1"
 mkfs.btrfs -f -L ArchLinux $disk"2"
 
