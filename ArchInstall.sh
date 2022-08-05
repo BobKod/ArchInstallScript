@@ -4,7 +4,7 @@ clear
 
 disk="/dev/sda"
 root_pswd="0000"
-user_name="user"
+user_name="papa"
 user_pswd="1111"
 
 wipefs -a $disk
@@ -13,16 +13,15 @@ mkfs.vfat -n EFI $disk"1"
 mkfs.btrfs -f -L ArchLinux $disk"2"
 
 mount $disk"2" /mnt
-cd /mnt
-btrfs subvolume create @
-btrfs subvolume create @home
-cd
+btrfs subvolume create /mnt/@
+btrfs subvolume create /mnt/@home
 umount /mnt
 
-mount -o noatime,compress=zstd:3,subvol=@ $disk"2" /mnt
+mount -o noatime,compress=zstd:3,discard=async,subvol=@ $disk"2" /mnt
 mount --mkdir -o noatime $disk"1" /mnt/boot/efi
-mount --mkdir -o noatime,compress=zstd:3,subvol=@home $disk"2" /mnt/home
+mount --mkdir -o noatime,compress=zstd:3,discard=async,subvol=@home $disk"2" /mnt/home
 
+echo -e "\n" | pacman -Sy archlinux-keyring
 pacstrap /mnt base linux linux-firmware btrfs-progs intel-ucode nano grub efibootmgr networkmanager sudo htop neofetch
 
 genfstab -U /mnt > /mnt/etc/fstab
