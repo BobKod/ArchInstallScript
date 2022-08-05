@@ -4,7 +4,7 @@ clear
 
 disk="/dev/sda"
 root_pswd="0000"
-user_name="papa"
+user_name="user"
 user_pswd="1111"
 
 wipefs -a $disk
