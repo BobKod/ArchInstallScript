@@ -24,7 +24,7 @@ mount --mkdir -o noatime,compress=zstd:3,discard=async,subvol=@home $disk"2" /mn
 echo -e "\n" | pacman -Sy archlinux-keyring
 pacstrap /mnt base linux linux-firmware btrfs-progs intel-ucode nano grub efibootmgr networkmanager sudo htop neofetch
 
-genfstab -U /mnt > /mnt/etc/fstab
+genfstab -U /mnt | sed "s/subvolid=[[:digit:]]\+,//" > /mnt/etc/fstab
 
 arch-chroot /mnt grub-install
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
