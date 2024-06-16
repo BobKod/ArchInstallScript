@@ -19,14 +19,14 @@ umount /mnt
 
 mount -o noatime,compress=zstd:3,discard=async,subvol=@ $disk"2" /mnt
 mount --mkdir -o noatime $disk"1" /mnt/boot/efi
-mount --mkdir -o noatime,compress=zstd:3,discard=async,subvol=@home $disk"2" /mnt/home
+mount --mkdir -o noatime,compress=zstd:3,discard,subvol=@home $disk"2" /mnt/home
 
-echo -e "\n" | pacman -Sy archlinux-keyring
-pacstrap /mnt base linux linux-firmware btrfs-progs intel-ucode nano grub efibootmgr networkmanager sudo htop neofetch
+pacstrap /mnt base linux linux-firmware btrfs-progs intel-ucode nano grub networkmanager sudo htop neofetch
+#efibootmgr
 
 genfstab -U /mnt | sed "s/subvolid=[[:digit:]]\+,//" > /mnt/etc/fstab
 
-arch-chroot /mnt grub-install
+arch-chroot /mnt grub-install --removable
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
 arch-chroot /mnt sh -c "echo root:$root_pswd | chpasswd; useradd -mG wheel $user_name; echo $user_name:$user_pswd | chpasswd"
